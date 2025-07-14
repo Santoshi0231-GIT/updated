@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
+const cartRoutes = require('./routes/cart');
 require('dotenv').config();
 
 const app = express();
@@ -22,6 +23,7 @@ const connectDB = async () => {
 // Middleware
 app.use(helmet()); // Security headers
 app.use(morgan('combined')); // Logging
+app.use(express.json());
 
 // Rate limiting
 const limiter = rateLimit({
@@ -41,6 +43,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Serve static files from frontend directory
+app.use(express.static('frontend'));
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/menu', require('./routes/menu'));
@@ -49,6 +54,9 @@ app.use('/api/customers', require('./routes/customers'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/recommendations', require('./routes/recommendations'));
 app.use('/api/location', require('./routes/location'));
+app.use('/api/esewa', require('./esewa-payment-gateway'));
+app.use('/api/cart', cartRoutes);
+
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
