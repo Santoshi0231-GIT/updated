@@ -4,7 +4,7 @@ const Order = require('../models/Order');
 const MenuItem = require('../models/MenuItem');
 const User = require('../models/User');
 const { authenticateToken, authorizeRole } = require('../middleware/auth');
-const { sendOrderConfirmationEmail } = require('../utils/email');
+const { sendOrderConfirmationEmail } = require('../../utils/email');
 const LocationService = require('../services/locationService');
 
 const router = express.Router();

@@ -4,7 +4,9 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
-const cartRoutes = require('./routes/cart');
+// Corrected path for cartRoutes
+const cartRoutes = require('./backend/routes/cart');
+
 require('dotenv').config();
 
 const app = express();
@@ -39,22 +41,23 @@ app.use(cors({
   credentials: true,
 }));
 
-// Body parsing middleware
+// Body parsing middleware - Note: express.json() is already called above,
+// but these specific limit settings are fine if you need them.
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve static files from frontend directory
 app.use(express.static('frontend'));
 
-// Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/menu', require('./routes/menu'));
-app.use('/api/orders', require('./routes/orders'));
-app.use('/api/customers', require('./routes/customers'));
-app.use('/api/admin', require('./routes/admin'));
-app.use('/api/recommendations', require('./routes/recommendations'));
-app.use('/api/location', require('./routes/location'));
-app.use('/api/esewa', require('./esewa-payment-gateway'));
+// Routes - ALL paths updated to include './backend/routes/'
+app.use('/api/auth', require('./backend/routes/auth'));
+app.use('/api/menu', require('./backend/routes/menu'));
+app.use('/api/orders', require('./backend/routes/orders'));
+app.use('/api/customers', require('./backend/routes/customers'));
+app.use('/api/admin', require('./backend/routes/admin'));
+app.use('/api/recommendations', require('./backend/routes/recommendations'));
+app.use('/api/location', require('./backend/routes/location'));
+// Removed esewa-payment-gateway route as requested
 app.use('/api/cart', cartRoutes);
 
 
